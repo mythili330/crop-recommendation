@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RaituSaarthi - AI Farming Assistant</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f0fdf4;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+    header {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+      padding: 1rem 2rem;
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+    #chatContainer {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 1rem;
+      overflow-y: auto;
+    }
+    .message {
+      padding: 0.8rem 1rem;
+      border-radius: 12px;
+      margin: 0.5rem 0;
+      max-width: 80%;
+    }
+    .user { background: #dcfce7; align-self: flex-end; }
+    .bot { background: #fef3c7; align-self: flex-start; }
+    footer {
+      display: flex;
+      padding: 0.8rem;
+      gap: 0.5rem;
+      background: white;
+      border-top: 1px solid #e2e8f0;
+      align-items: center;
+    }
+    #userInput {
+      flex: 1;
+      padding: 0.8rem 1rem;
+      border-radius: 12px;
+      border: 1px solid #10b981;
+      font-size: 1rem;
+    }
+    #sendBtn, #voiceBtn, #imageUpload, #analyzeBtn {
+      padding: 0.5rem 0.8rem;
+      background: #10b981;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: 0.2s;
+    }
+    #sendBtn:hover, #voiceBtn:hover, #analyzeBtn:hover { background: #059669; }
+    #imageUpload {
+      padding: 0.3rem;
+    }
+  </style>
+</head>
+<body>
+  <header>🌾 RaituSaarthi - Your AI Farming Assistant</header>
+
+  <!-- Chat container -->
+  <div id="chatContainer"></div>
+
+  <!-- Footer: Text input + Voice + Send + Image Upload + Analyze -->
+  <footer>
+    <input type="text" id="userInput" placeholder="Ask me about crops, soil, weather..." />
+    <button id="voiceBtn">🎤</button>
+    <button id="sendBtn">Send</button>
+    <input type="file" id="imageUpload" accept="image/*" />
+    <button id="analyzeBtn">Analyze</button>
+  </footer>
+
+  <script>
+    const chatContainer = document.getElementById('chatContainer');
+    const userInput = document.getElementById('userInput');
+    const sendBtn = document.getElementById('sendBtn');
+    const voiceBtn = document.getElementById('voiceBtn');
+    const imageUpload = document.getElementById('imageUpload');
+    const analyzeBtn = document.getElementById('analyzeBtn');
+
+    function addMessage(text, sender='bot') {
+      const msgDiv = document.createElement('div');
+      msgDiv.classList.add('message', sender);
+      msgDiv.textContent = text;
+      chatContainer.appendChild(msgDiv);
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+
+    function detectLanguage(text) {
+      if (/[అ-హ]/.test(text)) return 'te-IN';
+      if (/[क-ह]/.test(text)) return 'hi-IN';
+      return 'en-US';
+    }
+
+    function speak(text, lang='en-US') {
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = lang;
+      speechSynthesis.speak(utterance);
+    }
+
+    async function getAIResponse(message) {
+      try {
+        const lang = detectLanguage(message);
+        let language = 'English';
+        if(lang === 'hi-IN') language = 'Hindi';
+        else if(lang === 'te-IN') language = 'Telugu';
+
+        const res = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: message, language: language })
+        });
+
+        const data = await res.json();
+        return data.reply;
+      } catch (err) {
+        console.error(err);
+        return "Sorry, I couldn't get an answer right now.";
+      }
+    }
+
+    async function sendMessage() {
+      const message = userInput.value.trim();
+      if(!message) return;
+      addMessage(message, 'user');
+      const aiResponse = await getAIResponse(message);
+      addMessage(aiResponse, 'bot');
+      speak(aiResponse, detectLanguage(message));
+      userInput.value = '';
+    }
+
+    sendBtn.addEventListener('click', sendMessage);
+    userInput.addEventListener('keypress', (e) => { if(e.key === 'Enter') sendMessage(); });
+
+    voiceBtn.addEventListener('click', () => {
+      const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+      recognition.lang = 'en-IN';
+      recognition.start();
+      recognition.onresult = (event) => {
+        const speech = event.results[0][0].transcript;
+        userInput.value = speech;
+        sendMessage();
+      };
+    });
+
+    analyzeBtn.addEventListener('click', async () => {
+      if(!imageUpload.files[0]) {
+        alert("Please upload an image first!");
+        return;
+      }
+      const formData = new FormData();
+      formData.append('file', imageUpload.files[0]);
+
+      try {
+        const res = await fetch('/api/analyze-image', {
+          method: 'POST',
+          body: formData
+        });
+        const data = await res.json();
+        addMessage("Analysis: " + data.prediction, 'bot');
+        speak(data.prediction, detectLanguage(data.prediction));
+      } catch(err) {
+        console.error(err);
+        addMessage("Error analyzing image.", 'bot');
+      }
+    });
+
+    // Initial greeting
+    addMessage("🌾 Namaste! I am RaituSaarthi. Ask me anything about farming in English, Hindi, or Telugu.", 'bot');
+    speak("Namaste! I am RaituSaarthi. Ask me anything about farming in English, Hindi, or Telugu.");
+  </script>
+</body>
+</html>

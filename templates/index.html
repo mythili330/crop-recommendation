@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Crop Recommendation</title>
+<style>
+  body { font-family: Arial, sans-serif; background:#f4f4f9; padding:20px; }
+  form { max-width:400px; margin:auto; background:#fff; padding:20px; border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,0.1); }
+  label { display:block; margin-top:10px; font-weight:bold; }
+  input, select, button { width:100%; padding:8px; margin-top:5px; border-radius:5px; border:1px solid #ccc; box-sizing:border-box; }
+  button { background:green; color:white; border:none; cursor:pointer; padding:12px; }
+  button:hover { background:darkgreen; }
+
+  #result { margin-top:20px; display:flex; flex-wrap:wrap; gap:20px; justify-content:center; }
+
+  .crop-card { width:220px; border-radius:10px; box-shadow:0 2px 8px rgba(0,0,0,0.12); overflow:hidden; text-align:center; background:#fff; padding-bottom:12px; }
+  .crop-card img { width:100%; height:140px; object-fit:cover; }
+  .crop-card h4 { margin:8px 0 4px; font-size:18px; color:#2c6f2c; }
+
+  .price-box {
+    background: linear-gradient(90deg,#fff7e6,#fff3d1);
+    border: 1px solid #ffd27f;
+    padding: 6px 10px;
+    border-radius: 8px;
+    display:inline-block;
+    min-width:120px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    margin-bottom:8px;
+  }
+  .price-label { font-size:12px; color:#6b4b00; display:block; }
+  .price { font-size:15px; font-weight:700; color:#d35400; }
+
+  .fertilizer {
+    background: #e8f5e9;
+    border: 1px solid #81c784;
+    padding: 6px 10px;
+    border-radius: 8px;
+    margin: 6px auto;
+    font-size: 13px;
+    font-weight: 600;
+    color: #1b5e20;
+    display: inline-block;
+  }
+
+  .crop-card p { font-size:12px; margin:4px 10px; color:#555; text-align:left; }
+  @media (max-width:600px) {
+    .crop-card { width:45%; }
+  }
+</style>
+</head>
+<body>
+
+<h2 style="text-align:center">🌱 Crop Recommendation System</h2>
+
+<form id="cropForm" style="max-width:520px; margin:auto;">
+  <label for="soil_type">Soil Type:</label>
+  <select id="soil_type" required>
+    <option value="">Select Soil Type</option>
+    <option value="sandy">Sandy</option>
+    <option value="clay">Clay</option>
+    <option value="loamy">Loamy</option>
+  </select>
+
+  <label for="location">Location (Village / District):</label>
+  <input type="text" id="location" name="location" placeholder="e.g., Khammam" required>
+
+  <label for="season">Season:</label>
+  <select id="season" required>
+    <option value="">Select Season</option>
+    <option value="summer">Summer</option>
+    <option value="winter">Winter</option>
+    <option value="rainy">Rainy</option>
+  </select>
+
+  <label for="rainfall">Rainfall:</label>
+  <select id="rainfall" required>
+    <option value="">Select Rainfall</option>
+    <option value="low">Low</option>
+    <option value="medium">Moderate</option>
+    <option value="high">High</option>
+  </select>
+
+  <button type="submit">Get Recommendations</button>
+</form>
+
+<div id="result"></div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const cropImages = {
+    "Rice": "https://eos.com/wp-content/uploads/2023/04/rice-field.jpg",
+    "Wheat": "https://cdn.pixabay.com/photo/2017/08/24/14/09/wheat-2676956_1280.jpg",
+    "Maize": "https://images2.alphacoders.com/216/216270.jpg",
+    "Carrots": "https://img.freepik.com/premium-photo/ripe-carrots-harvested-vegetable-farm-carrot-harvest-carrot-cultivation-concept_561246-1590.jpg?w=2000",
+    "Potatoes": "https://c1.wallpaperflare.com/preview/756/443/682/potatoes-vegetables-erdfrucht-bio.jpg",
+    "Cabbage": "https://img.freepik.com/premium-photo/cabbage-field-cultivation-lush-green-leafy-cabbage-crop-growing-vast-agriculture-land-ideal_1014870-11037.jpg?w=996",
+    "Cotton": "https://c4.wallpaperflare.com/wallpaper/540/178/505/field-sunset-branches-nature-cotton-hd-wallpaper-preview.jpg",
+    "Sorghums": "https://plantix.net/en/library/assets/custom/crop-images/sorghum.jpeg",
+    "Watermelons": "https://tse3.mm.bing.net/th/id/OIP.9fIWkNld5rkptprJyN0CCAHaE8?pid=Api&P=0&h=180",
+    "Tomatoes": "https://rare-gallery.com/uploads/posts/859804-Closeup-Tomatoes-White-background.jpg",
+    "Millets": "https://img2.exportersindia.com/product_images/bc-full/2019/1/6054176/organic-barnyard-millet-1547117488-4636596.jpeg",
+    "Peanuts": "https://plantix.net/en/library/assets/custom/crop-images/peanut.jpeg"
+  };
+
+  const defaultImage = "https://upload.wikimedia.org/wikipedia/commons/6/6f/Farm_landscape.jpg";
+
+  function renderCropCard(crop, imgSrc, price, fertilizer, irrigation, seasonAdvice) {
+    return `
+      <div class="crop-card" role="group" aria-label="${crop} card">
+        <img src="${imgSrc}" alt="${crop}">
+        <h4>${crop}</h4>
+
+        <div class="price-box" aria-live="polite">
+          <span class="price-label">Market Price</span>
+          <span class="price">${price || "N/A"}</span>
+        </div>
+
+        <div class="fertilizer">🌱 Fertilizer: ${fertilizer || "Not available"}</div>
+
+        <p>💧 <strong>Irrigation:</strong> ${irrigation}</p>
+        <p>☀️ <strong>Season:</strong> ${seasonAdvice}</p>
+      </div>
+    `;
+  }
+
+  document.getElementById("cropForm").addEventListener("submit", async function(e) {
+    e.preventDefault();
+    const formData = {
+      soil_type: document.getElementById("soil_type").value,
+      location: document.getElementById("location").value,
+      season: document.getElementById("season").value,
+      rainfall: document.getElementById("rainfall").value
+    };
+
+    try {
+      const response = await fetch("/predict", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData)
+      });
+      const data = await response.json();
+      const resultDiv = document.getElementById("result");
+      resultDiv.innerHTML = "";
+
+      if (data.success) {
+        const prices = data["Market Prices"] || {};
+        const fertilizers = data["Fertilizers"] || {};
+        data["Recommended Crops"].forEach(crop => {
+          const imgSrc = cropImages[crop] || defaultImage;
+          const price = prices[crop] || "N/A";
+          const fert = fertilizers[crop] || "Not available";
+          resultDiv.innerHTML += renderCropCard(
+            crop, imgSrc, price, fert,
+            data["Irrigation Advice"],
+            data["Season Advice"]
+          );
+        });
+      } else {
+        resultDiv.innerHTML = `<p style="color:red;">Something went wrong. Try again!</p>`;
+      }
+    } catch (err) {
+      console.error(err);
+      document.getElementById("result").innerHTML = `<p style="color:red;">Server error. Try again later!</p>`;
+    }
+  });
+
+});
+</script>
+
+</body>
+</html>

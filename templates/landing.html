@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AgriSmart - Complete Smart Farming Ecosystem</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      line-height: 1.7;
+      color: #1a202c;
+      overflow-x: hidden;
+    }
+
+    /* Hero Section */
+    .hero {
+      position: relative;
+      height: 100vh;
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.95), rgba(5, 150, 105, 0.9)), 
+                  url('https://blog.agriapp.com/wp-content/uploads/2024/05/ai-generated-cotton-flower-branch-on-nature-photo.webp');
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: white;
+    }
+
+    .hero-content {
+      max-width: 900px;
+      padding: 0 2rem;
+      animation: fadeInUp 1s ease-out;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.8rem, 6vw, 5rem);
+      font-weight: 800;
+      margin-bottom: 1rem;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+      letter-spacing: -0.02em;
+    }
+
+    .hero-subtitle {
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+      opacity: 0.95;
+      font-weight: 500;
+      color: #fef3c7;
+    }
+
+    .hero p {
+      font-size: 1.1rem;
+      margin-bottom: 2rem;
+      opacity: 0.9;
+      font-weight: 300;
+    }
+
+    .hero-features {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 2.5rem;
+      flex-wrap: wrap;
+    }
+
+    .hero-feature {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      padding: 0.8rem 1.5rem;
+      border-radius: 30px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .cta-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .cta-primary, .cta-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 1rem 2.5rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border-radius: 50px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+    }
+
+    .cta-primary {
+      background: linear-gradient(135deg, #ffffff, #f7fafc);
+      color: #065f46;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .cta-secondary {
+      background: transparent;
+      color: white;
+      border-color: rgba(255, 255, 255, 0.8);
+    }
+
+    .cta-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    }
+
+    .cta-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: white;
+    }
+
+    /* Section Styling */
+    section {
+      padding: 5rem 1rem;
+      width: 100%;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .section-header h2 {
+      font-size: clamp(2.2rem, 4vw, 3.2rem);
+      font-weight: 700;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, #059669, #10b981);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .section-header p {
+      font-size: 1.1rem;
+      color: #6b7280;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Core Features Grid */
+    .core-features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .core-feature {
+      background: white;
+      padding: 2.5rem 2rem;
+      border-radius: 20px;
+      text-align: left;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      transition: all 0.3s ease;
+      border: 1px solid #f3f4f6;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .core-feature::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(135deg, #10b981, #059669);
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+    }
+
+    .core-feature:hover::before {
+      transform: scaleX(1);
+    }
+
+    .core-feature:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+    }
+
+    .feature-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .feature-icon {
+      font-size: 2.5rem;
+      background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+      padding: 0.8rem;
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .core-feature h3 {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: #1f2937;
+    }
+
+    .core-feature p {
+      color: #6b7280;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+
+    .feature-highlights {
+      list-style: none;
+    }
+
+    .feature-highlights li {
+      padding: 0.5rem 0;
+      color: #059669;
+      font-weight: 500;
+      position: relative;
+      padding-left: 1.5rem;
+    }
+
+    .feature-highlights li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: #10b981;
+      font-weight: bold;
+    }
+
+    /* Tech Stack Section */
+    .tech-stack {
+      background: linear-gradient(135deg, #f0fdf4, #ecfdf5);
+      border-radius: 24px;
+      padding: 4rem 2rem;
+      margin: 4rem 0;
+    }
+
+    .tech-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .tech-card {
+      background: white;
+      padding: 2rem;
+      border-radius: 16px;
+      text-align: center;
+      border: 1px solid #d1fae5;
+      transition: all 0.3s ease;
+    }
+
+    .tech-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    }
+
+    .tech-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .tech-card h4 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: #065f46;
+    }
+
+    /* Revenue Model */
+    .revenue-section {
+      background: linear-gradient(135deg, #1f2937, #374151);
+      color: white;
+      border-radius: 24px;
+      padding: 4rem 2rem;
+      margin: 4rem 0;
+      text-align: center;
+    }
+
+    .revenue-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .revenue-card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      padding: 2rem;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .revenue-card:hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: translateY(-3px);
+    }
+
+    .revenue-card h4 {
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+      color: #fef3c7;
+    }
+
+    /* Dashboard Preview */
+    .dashboard-preview {
+      background: linear-gradient(135deg, #fefce8, #fef3c7);
+      border-radius: 24px;
+      padding: 4rem 2rem;
+      margin: 4rem 0;
+      text-align: center;
+    }
+
+    .dashboard-features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+
+    .dashboard-item {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      font-weight: 500;
+      color: #92400e;
+    }
+
+    /* Final CTA */
+    .final-cta {
+      background: linear-gradient(135deg, #065f46, #047857);
+      color: white;
+      text-align: center;
+      border-radius: 24px;
+      margin: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .final-cta::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 50%);
+      animation: shimmer 4s ease-in-out infinite;
+    }
+
+    .cta-content {
+      position: relative;
+      z-index: 1;
+      padding: 4rem 2rem;
+    }
+
+    .final-cta h2 {
+      font-size: 2.8rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    .final-cta p {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+      opacity: 0.9;
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes shimmer {
+      0%, 100% { transform: translateX(-100%) translateY(-100%); }
+      50% { transform: translateX(100%) translateY(100%); }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .core-features {
+        grid-template-columns: 1fr;
+      }
+      
+      .tech-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .revenue-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      section {
+        padding: 3rem 1rem;
+      }
+
+      .hero-features {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>AgriSmart</h1>
+      <div class="hero-subtitle">Complete Smart Farming Ecosystem</div>
+      <p>Empowering farmers with AI-driven insights, community support, and comprehensive agricultural solutions for maximum yield and sustainable farming.</p>
+      
+      <div class="hero-features">
+        <div class="hero-feature">🤖 AI-Powered Recommendations</div>
+        <div class="hero-feature">👥 Farmer Community</div>
+        <div class="hero-feature">📱 Complete Dashboard</div>
+        <div class="hero-feature">💰 Market Intelligence</div>
+      </div>
+
+      <div class="cta-buttons">
+        <a href="/index" class="cta-primary">🚀 Try Crop Recommendation</a>
+        <a href="/assistant" class="cta-primary">🤖 AI Chat Assistant</a>
+        <a href="#features" class="cta-secondary">📋 View All Features</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Core Features Section -->
+  <section id="features">
+    <div class="container">
+      <div class="section-header">
+        <h2>Complete Farming Ecosystem</h2>
+        <p>Everything a modern farmer needs in one intelligent platform</p>
+      </div>
+      
+      <div class="core-features">
+        <div class="core-feature">
+          <div class="feature-header">
+            <div class="feature-icon">🏠</div>
+            <h3>Farmer Dashboard</h3>
+          </div>
+          <p>Personalized hub for all your farming activities and data management.</p>
+          <ul class="feature-highlights">
+            <li>Personal profile & farm details</li>
+            <li>Soil type & land size tracking</li>
+            <li>Seasonal weather overview</li>
+            <li>Quick access to AI tools</li>
+          </ul>
+        </div>
+
+        <div class="core-feature">
+          <div class="feature-header">
+            <div class="feature-icon">🌱</div>
+            <h3>AI Crop Recommendation</h3>
+          </div>
+          <p>Smart crop suggestions based on soil, weather, and market conditions.</p>
+          <ul class="feature-highlights">
+            <li>Soil-specific recommendations</li>
+            <li>Yield potential analysis</li>
+            <li>Market value predictions</li>
+            <li>Climate-resilient options</li>
+          </ul>
+        </div>
+
+        <div class="core-feature">
+          <div class="feature-header">
+            <div class="feature-icon">🤖</div>
+            <h3>AI Chat Assistant</h3>
+          </div>
+          <p>24/7 farming assistant answering questions in natural language.</p>
+          <ul class="feature-highlights">
+            <li>Natural language queries</li>
+            <li>Fertilizer recommendations</li>
+            <li>Disease treatment advice</li>
+            <li>Multi-language support</li>
+          </ul>
+        </div>
+
+        <div class="core-feature">
+          <div class="feature-header">
+            <div class="feature-icon">👥</div>
+            <h3>Community Q&A Platform</h3>
+          </div>
+          <p>Farmer-to-farmer knowledge sharing with expert guidance.</p>
+          <ul class="feature-highlights">
+            <li>Photo-based questions</li>
+            <li>Expert answers & ratings</li>
+            <li>Reputation system</li>
+            <li>Local language support</li>
+          </ul>
+        </div>
+
+        <div class="core-feature">
+          <div class="feature-header">
+            <div class="feature-icon">🌦️</div>
+            <h3>Weather & Market Insights</h3>
+          </div>
+          <p>Real-time weather forecasts and market price intelligence.</p>
+          <ul class="feature-highlights">
+            <li>Daily & weekly forecasts</li>
+            <li>Crop-specific price trends</li>
+            <li>Weather alerts</li>
+            <li>Market timing suggestions</li>
+          </ul>
+        </div>
+
+        <div class="core-feature">
+          <div class="feature-header">
+            <div class="feature-icon">🔬</div>
+            <h3>Disease & Pest Diagnosis</h3>
+          </div>
+          <p>AI-powered disease detection through image analysis.</p>
+          <ul class="feature-highlights">
+            <li>Photo-based diagnosis</li>
+            <li>Treatment recommendations</li>
+            <li>Preventive measures</li>
+            <li>Early detection alerts</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Technology Stack -->
+  <section class="tech-stack">
+    <div class="container">
+      <div class="section-header">
+        <h2 style="color: #065f46;">Powered by Advanced Technology</h2>
+        <p style="color: #374151;">Built with modern technologies for reliability and scalability</p>
+      </div>
+      
+      <div class="tech-grid">
+        <div class="tech-card">
+          <span class="tech-icon">🐍</span>
+          <h4>Python & Flask</h4>
+          <p>Robust backend with machine learning capabilities</p>
+        </div>
+        <div class="tech-card">
+          <span class="tech-icon">🧠</span>
+          <h4>AI & ML Models</h4>
+          <p>Trained on real agricultural datasets</p>
+        </div>
+        <div class="tech-card">
+          <span class="tech-icon">📱</span>
+          <h4>Responsive Design</h4>
+          <p>Works perfectly on all devices</p>
+        </div>
+        <div class="tech-card">
+          <span class="tech-icon">🔗</span>
+          <h4>API Integration</h4>
+          <p>Weather, market, and government data</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Revenue Model -->
+  <section class="revenue-section">
+    <div class="container">
+      <div class="section-header">
+        <h2 style="color: white;">Sustainable Business Model</h2>
+        <p style="color: #d1d5db;">Multiple revenue streams ensuring long-term sustainability</p>
+      </div>
+      
+      <div class="revenue-grid">
+        <div class="revenue-card">
+          <h4>🏛️ Government Partnerships</h4>
+          <p>Integration with agricultural departments and NGOs</p>
+        </div>
+        <div class="revenue-card">
+          <h4>📢 Smart Advertising</h4>
+          <p>Relevant ads for seeds, fertilizers, and equipment</p>
+        </div>
+        <div class="revenue-card">
+          <h4>💎 Premium Services</h4>
+          <p>Advanced analytics and personalized consulting</p>
+        </div>
+        <div class="revenue-card">
+          <h4>🛒 E-commerce Commission</h4>
+          <p>Direct sales platform connecting farmers and suppliers</p>
+        </div>
+        <div class="revenue-card">
+          <h4>📊 Data Insights</h4>
+          <p>Aggregated agricultural trends for research</p>
+        </div>
+        <div class="revenue-card">
+          <h4>🤝 Expert Consultations</h4>
+          <p>On-demand agricultural expert advice</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Dashboard Preview -->
+  <section class="dashboard-preview">
+    <div class="container">
+      <div class="section-header">
+        <h2 style="color: #92400e;">Farmer Dashboard Features</h2>
+        <p style="color: #78716c;">Everything farmers need in one comprehensive interface</p>
+      </div>
+      
+      <div class="dashboard-features">
+        <div class="dashboard-item">📋 Smart Soil Health Reports</div>
+        <div class="dashboard-item">🏛️ Government Scheme Alerts</div>
+        <div class="dashboard-item">📚 Best Practices Library</div>
+        <div class="dashboard-item">🛒 Community Marketplace</div>
+        <div class="dashboard-item">🎙️ Voice Assistant</div>
+        <div class="dashboard-item">📶 Offline Mode Support</div>
+        <div class="dashboard-item">🌟 Success Stories</div>
+        <div class="dashboard-item">📱 Mobile-First Design</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Final CTA -->
+  <section class="final-cta">
+    <div class="cta-content">
+      <h2>Ready to Transform Agriculture?</h2>
+      <p>Join thousands of farmers already using our comprehensive smart farming platform</p>
+      <div class="cta-buttons">
+        <a href="/index" class="cta-primary">🌾 Start Your Journey</a>
+        <a href="#features" class="cta-secondary">📖 Learn More</a>
+      </div>
+    </div>
+  </section>
+
+</body>
+</html>

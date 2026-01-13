@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Crop Recommendation</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      scroll-behavior: smooth;
+    }
+    header {
+      background: url("https://share.google/images/pkPi1YbBUv7XgaIkt") no-repeat center center/cover;
+      height: 90vh;
+      color: white;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    header h1 { font-size: 50px; margin: 0; }
+    header p { font-size: 20px; max-width: 700px; margin: 10px auto; }
+    section { padding: 60px 20px; text-align: center; }
+    .about, .features, .how-it-works { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 30px; }
+    .about img, .how-it-works img { width: 400px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.2); }
+    .about div, .how-it-works div { max-width: 500px; text-align: left; }
+    .feature-card {
+      background: white; padding: 20px; border-radius: 10px; width: 250px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .cta {
+      background: green;
+      color: white;
+      padding: 40px 20px;
+    }
+    .cta button {
+      background: white; color: green; padding: 15px 30px; font-size: 18px;
+      border: none; border-radius: 8px; cursor: pointer; font-weight: bold;
+    }
+    .cta button:hover { background: darkgreen; color: white; }
+    /* Form styling */
+    #cropFormSection {
+      background: #fff; padding: 40px 20px; border-radius: 10px;
+      max-width: 600px; margin: 40px auto; box-shadow: 0 0 15px rgba(0,0,0,0.1);
+      text-align: left;
+    }
+    #cropForm label { font-weight: bold; display: block; margin-top: 10px; }
+    #cropForm input, #cropForm select { width: 100%; padding: 8px; margin-top: 5px; border-radius: 5px; border: 1px solid #ccc; }
+    #cropForm button { margin-top: 15px; width: 100%; padding: 10px; background: green; color: white; border: none; border-radius: 5px; cursor: pointer; }
+    #cropForm button:hover { background: darkgreen; }
+    #result { margin-top: 20px; background: #f9f9f9; padding: 20px; border-radius: 10px; font-size: 16px; color: #333; }
+    #result h3 { margin-top: 0; color: green; text-align: center; }
+  </style>
+</head>
+<body>
+
+  <!-- HERO SECTION -->
+  <header>
+    <h1>🌱 Smart Crop Recommendation</h1>
+    <p>Empowering farmers with AI-driven insights to choose the best crops based on soil nutrients, weather, and rainfall conditions.</p>
+    <a href="#cropFormSection">
+      <button>🌾 Get Recommendation</button>
+    </a>
+  </header>
+
+  <!-- ABOUT SECTION -->
+  <section class="about">
+    <img src="https://share.google/images/SIz1EHyEMd714uT8y" alt="Farm">
+    <div>
+      <h2>About Our System</h2>
+      <p>
+        Agriculture is the backbone of our society, and choosing the right crop for the right soil 
+        is crucial for sustainable farming. Our Crop Recommendation System leverages Artificial 
+        Intelligence and Machine Learning to help farmers make informed decisions.
+      </p>
+    </div>
+  </section>
+
+  <!-- FEATURES SECTION -->
+  <section>
+    <h2>✨ Features</h2>
+    <div class="features">
+      <div class="feature-card">🌱 <h3>Soil Analysis</h3><p>Enter Nitrogen, Phosphorus, Potassium, and pH to get accurate crop suggestions.</p></div>
+      <div class="feature-card">🌦 <h3>Weather Insights</h3><p>Our model integrates live weather conditions to improve accuracy.</p></div>
+      <div class="feature-card">🤖 <h3>AI Powered</h3><p>Trained with real-world agricultural datasets for smart predictions.</p></div>
+      <div class="feature-card">📊 <h3>Farmer Friendly</h3><p>Simple interface, instant results, and easy to understand recommendations.</p></div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS SECTION -->
+  <section>
+    <h2>🚜 How It Works</h2>
+    <div class="how-it-works">
+      <img src="https://share.google/images/m53ajprzkAUBFTRjC" alt="Process">
+      <div>
+        <p><strong>Step 1:</strong> Input your soil nutrients, weather, and rainfall data.</p>
+        <p><strong>Step 2:</strong> Our AI processes the data using trained models.</p>
+        <p><strong>Step 3:</strong> Instantly get the recommended crop best suited for your field.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CROP RECOMMENDATION FORM SECTION -->
+  <section id="cropFormSection">
+    <h2>🌾 Get Your Crop Recommendation</h2>
+    <form id="cropForm">
+      <label for="soil_type">Soil Type:</label>
+      <select id="soil_type" required>
+        <option value="">Select Soil Type</option>
+        <option value="sandy">Sandy</option>
+        <option value="clay">Clay</option>
+        <option value="loamy">Loamy</option>
+      </select>
+
+      <label for="ph">Soil pH:</label>
+      <input type="number" step="0.1" id="ph" placeholder="e.g., 6.5" required>
+
+      <label for="temperature">Average Temperature (°C):</label>
+      <input type="number" step="0.1" id="temperature" required>
+
+      <label for="rainfall">Monthly Rainfall (mm):</label>
+      <input type="number" step="0.1" id="rainfall" required>
+
+      <button type="submit">Get Recommendations</button>
+    </form>
+
+    <div id="result"></div>
+  </section>
+
+  <!-- JS for form submission -->
+  <script>
+    document.getElementById("cropForm").addEventListener("submit", async function(event) {
+      event.preventDefault();
+      const formData = {
+        soil_type: document.getElementById("soil_type").value,
+        ph: document.getElementById("ph").value,
+        temperature: document.getElementById("temperature").value,
+        rainfall: document.getElementById("rainfall").value
+      };
+      try {
+        const response = await fetch("/predict", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData)
+        });
+        const data = await response.json();
+        let resultDiv = document.getElementById("result");
+        if (data["Recommended Crops"]) {
+          resultDiv.innerHTML = `
+            <h3>🌾 Recommendations</h3>
+            <p><strong>Recommended Crops:</strong> ${data["Recommended Crops"].join(", ")}</p>
+            <p><strong>Fertilizer Advice:</strong> ${data["Fertilizer Advice"]}</p>
+            <p><strong>Irrigation Advice:</strong> ${data["Irrigation Advice"]}</p>
+            <p><strong>Temperature Advice:</strong> ${data["Temperature Advice"]}</p>
+          `;
+        } else {
+          resultDiv.innerHTML = "⚠️ Error: Could not get recommendations.";
+        }
+      } catch (error) {
+        document.getElementById("result").innerHTML = "❌ Server error. Please try again.";
+      }
+    });
+  </script>
+
+</body>
+</html>
